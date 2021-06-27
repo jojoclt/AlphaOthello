@@ -6,6 +6,14 @@
 #include <queue>
 #include <vector>
 
+#define inf 1e9
+const int SIZE = 8;
+using ARR = std::array<std::array<int, SIZE>, SIZE>;
+using std::vector;
+
+enum Algo { purerandom, statevalue, minimax, alphabeta };
+Algo algo = statevalue;
+
 struct Point {
     int x, y;
     Point() : Point(0, 0) {}
@@ -22,20 +30,19 @@ struct Point {
     }
 };
 
-struct node {
+struct Node {
     Point p;
     double val;
-    bool operator<(node t) const { return t.val > val; }
-    node(Point p, double val) : p(p), val(val) {}
+    bool operator<(Node t) const { return t.val > val; }
+    Node() : p(0,0), val(0) {}
+    Node(Point p, double val) : p(p), val(val) {}
 };
 
-enum Algo { purerandom, statevalue, minimax, alphabeta };
-Algo algo = statevalue;
+
 
 int player;
-const int SIZE = 8;
-std::array<std::array<int, SIZE>, SIZE> board, _board;
-std::vector<Point> next_valid_spots;
+ARR board, _board;
+vector<Point> next_valid_spots;
 
 enum SPOT_STATE { EMPTY = 0, BLACK = 1, WHITE = 2 };
 const std::array<Point, 8> directions{{
@@ -83,6 +90,19 @@ int get_valid_spots_count(int curPlayer) {
     }
     return cnt;
 }
+vector<Point> get_valid_spots(ARR _board, int curPlayer) {
+    std::vector<Point> v;
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            Point p = Point(i, j);
+            if (_board[i][j] != EMPTY)
+                continue;
+            if (is_spot_valid(p, curPlayer))
+                v.push_back(p);
+        }
+    }
+    return v;
+}
 void flip_discs(Point center)
 {
     for (Point dir : directions) {
@@ -96,7 +116,6 @@ void flip_discs(Point center)
                 for (Point s : discs) {
                     set_disc(s, player);
                 }
-
                 break;
             }
             discs.push_back(p);
@@ -109,7 +128,7 @@ void put_disc(Point p)
     set_disc(p, player);
     flip_discs(p);
 }
-float Heuristic()
+double Heuristic(ARR _board)
 {
     int count[3] = {};
     double V = 0, D = 0, C = 0, M = 0;
@@ -160,17 +179,56 @@ float Heuristic()
     double score = (10 * V) + (10 * D) + (77.98 * M) + (752.44 * C);
     return score;
 }
-Point StateValue(int n)
+Point StateValue()
 {
-    std::priority_queue<node> pq;
+    std::priority_queue<Node> pq;
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < next_valid_spots.size(); i++) {
         _board = board;
         put_disc(next_valid_spots[i]);
-        pq.push(node(next_valid_spots[i], Heuristic()));
+        pq.push(Node(next_valid_spots[i], Heuristic(_board)));
     }
     return pq.top().p;
 }
+double EvalMiniMax(ARR _state, int depth, int p) { 
+    if (p == 0) {
+        return Heuristic(_state);
+    }
+    vector<Point> nextMoves = get_valid_spots(_state, p);
+    double bestVal = (p == player) ? -inf : inf;
+    for (auto c : nextMoves) {
+         _board = _state;
+        put_disc(c);
+        double val = EvalMiniMax(_board, depth - 1, get_next_player(p));
+
+        if (p == player) 
+            bestVal = std::max(bestVal, val);
+        
+        else 
+            bestVal = std::min(bestVal, val);
+    }
+
+    return bestVal;
+    
+}
+Point MiniMax(ARR _state, int depth, int p) {
+    
+    double bestVal = -inf;
+    Point bestMove = next_valid_spots[0];
+    for (auto c : next_valid_spots) {
+        _board = _state;
+        put_disc(c);
+
+        double val = EvalMiniMax(_board, depth, p);
+
+        if (val > bestVal) {
+            bestVal = val;
+            bestMove = c;
+        }
+    }
+    return bestMove;
+}
+
 void read_board(std::ifstream& fin)
 {
     fin >> player;
@@ -195,6 +253,7 @@ void read_valid_spots(std::ifstream& fin)
 void write_valid_spot(std::ofstream& fout)
 {
     int n_valid_spots = next_valid_spots.size();
+    if (n_valid_spots == 0) return;
 
     Point p;
     if (algo == purerandom) {
@@ -203,11 +262,11 @@ void write_valid_spot(std::ofstream& fout)
         p = next_valid_spots[index];
     }
     else if (algo == statevalue) {
-        p = StateValue(n_valid_spots);
+        p = StateValue();
     }
-    // else if (algo == minimax) {
-    //     p = MiniMax(n_valid_spots);
-    // }
+    else if (algo == minimax) {
+        p = MiniMax(board, 4, player);
+    }
     // else if (algo == alphabeta) {
     //     p = AlphaBeta(n_valid_spots);
     // }
