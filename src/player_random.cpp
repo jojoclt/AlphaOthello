@@ -24,9 +24,9 @@ struct Point {
 
 struct node {
     Point p;
-    float val;
+    double val;
     bool operator<(node t) const { return t.val > val; }
-    node(Point p, float val) : p(p), val(val) {}
+    node(Point p, double val) : p(p), val(val) {}
 };
 
 enum Algo { purerandom, statevalue, minimax, alphabeta };
@@ -112,7 +112,7 @@ void put_disc(Point p)
 float Heuristic()
 {
     int count[3] = {};
-    double V = 0, D = 0,M = 0;
+    double V = 0, D = 0, C = 0, M = 0;
     std::array<std::array<int, SIZE>, SIZE> w;
     w[0] = {100, -10, 11, 6, 6, 11, -10, 100};
     w[1] = {-10, -20, 1, 2, 2, 1, -20, -10};
@@ -148,7 +148,16 @@ float Heuristic()
         M = -(100.0 * count[player])/(count[player] + count[get_next_player(player)]);
     else M = 0;
 
-    double score = (10 * V) + (10 * D) + (24.98 * M);
+    // Corners Captured
+    count[1] = count[2] = 0;
+    count[_board[0][0]]++;
+    count[_board[0][7]]++;
+    count[_board[7][0]]++;
+    count[_board[7][7]]++;
+
+    C = count[player] - count[get_next_player(player)];
+
+    double score = (10 * V) + (10 * D) + (77.98 * M) + (752.44 * C);
     return score;
 }
 Point StateValue(int n)
