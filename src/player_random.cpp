@@ -8,12 +8,14 @@
 #include<cassert>
 
 #define inf 1e9
+
+const int DEPTH = 3;
 const int SIZE = 8;
 using ARR = std::array<std::array<int, SIZE>, SIZE>;
 using std::vector;
 
-enum Algo { purerandom, statevalue, minimax, alphabeta };
-Algo algo = minimax;
+enum Algo { purerandom, statevalue, minimax, alphabeta, negascout };
+Algo algo = alphabeta;
 
 struct Point {
     int x, y;
@@ -233,7 +235,7 @@ double MiniMax(ARR _board, int depth, int curPlayer) {
     if (depth == 0) return Heuristic(_board, curPlayer);
 
     vector <Point> nextMove = get_valid_spots(_board, curPlayer);
-    if (nextMove.size() == 0 && get_valid_spots(_board, get_next_player(curPlayer)).size() == 0) return 0;
+
     if (nextMove.size() == 0) return MiniMax(_board, depth - 1, get_next_player(curPlayer));
     //Maximizing
     if (curPlayer == player) {
@@ -241,26 +243,22 @@ double MiniMax(ARR _board, int depth, int curPlayer) {
         for (Point p : nextMove) {
             ARR _state = _board;
             put_disc(_state, p, curPlayer);
-            double eval = MiniMax(_state, depth - 1, get_next_player(curPlayer));
-            if (eval > val) {
-                val = eval;
-            }
+            val = std::max(val, MiniMax(_state, depth - 1, get_next_player(curPlayer)));
         }
         return val;
     }
     // Minimizing
-    double val = inf;
-    for (Point p : nextMove) {
-        ARR _state = _board;
-        put_disc(_state, p , curPlayer);
-        double eval = MiniMax(_state, depth - 1, get_next_player(curPlayer));
-        if (eval < val) {
-            val = eval;
+    else {
+        double val = inf;
+        for (Point p : nextMove) {
+            ARR _state = _board;
+            put_disc(_state, p , curPlayer);
+            val = std::min(val, MiniMax(_state, depth - 1, get_next_player(curPlayer)));
         }
+        return val;
     }
-    return val;
 }
-Point MiniMaxDecision(int depth) {
+Point MiniMaxDecision(int depth, std::ofstream& fout) {
     double bestVal = -inf;
 
     for (auto p : next_valid_spots) {
@@ -272,10 +270,86 @@ Point MiniMaxDecision(int depth) {
             bestMove = p;
             bestVal = tmp;
         }
+        fout << bestMove.x << " " << bestMove.y << "\n";
     }
     return bestMove;
 }
+double AlphaBeta(ARR _board, int depth, int curPlayer, double a, double b) {
+    if (depth == 0) return Heuristic(_board, curPlayer);
 
+    vector <Point> nextMove = get_valid_spots(_board, curPlayer);
+    if (nextMove.size() == 0) return AlphaBeta(_board, depth - 1, get_next_player(curPlayer), a, b);
+    //Maximizing
+    if (curPlayer == player) {
+        double val = -inf;
+        for (Point p : nextMove) {
+            ARR _state = _board;
+            put_disc(_state, p, curPlayer);
+            val = std::max(val, AlphaBeta(_state, depth - 1, get_next_player(curPlayer), a, b));
+
+            if (val >= b) break;
+            a = std::max(a, val);
+        }
+        return val;
+    }
+    // Minimizing
+    else {
+        double val = inf;
+        for (Point p : nextMove) {
+            ARR _state = _board;
+            put_disc(_state, p , curPlayer);
+            val = std::min(val, AlphaBeta(_state, depth - 1, get_next_player(curPlayer), a, b));
+
+            if (val <= a) break;
+            b = std::min(b, val);
+        }
+        return val;
+    }
+}
+Point AlphaBetaDecision(int depth, std::ofstream& fout) {
+     double bestVal = -inf;
+
+    for (auto p : next_valid_spots) {
+        ARR _state = board;
+        put_disc(_state, p , player);
+        double tmp = AlphaBeta(_state, depth, get_next_player(player), -inf, inf);
+
+        if (tmp > bestVal) {
+            bestMove = p;
+            bestVal = tmp;
+        }
+        fout << bestMove.x << " " << bestMove.y << "\n";
+    }
+    return bestMove;
+}
+double NegaScout(ARR _board, int depth, int curPlayer, double a, double b) {
+     if (depth == 0) return Heuristic(_board, curPlayer);
+
+    vector <Point> nextMove = get_valid_spots(_board, curPlayer);
+    if (nextMove.size() == 0 && get_valid_spots(_board, get_next_player(curPlayer)).size() == 0) return 0;
+    if (nextMove.size() == 0) return AlphaBeta(_board, depth - 1, get_next_player(curPlayer), a, b);
+    
+    for (Point p : nextMove) {
+
+    }
+   
+}
+Point NegaScoutDecision(int depth,std::ofstream& fout) {
+      double bestVal = -inf;
+
+    for (auto p : next_valid_spots) {
+        ARR _state = board;
+        put_disc(_state, p , player);
+        double tmp = NegaScout(_state, depth, get_next_player(player), -inf, inf);
+
+        if (tmp > bestVal) {
+            bestMove = p;
+            bestVal = tmp;
+        }
+        fout << bestMove.x << " " << bestMove.y << "\n";
+    }
+    return bestMove;
+}
 void read_board(std::ifstream& fin)
 {
     fin >> player;
@@ -313,15 +387,15 @@ void write_valid_spot(std::ofstream& fout)
         p = StateValue();
     }
     else if (algo == minimax) {
-        p = MiniMaxDecision(3);
+        p = MiniMaxDecision(DEPTH, fout);
         //  higher depths might run out of spaces 
-        //  std::ofstream log("TRY.txt");
-        //  log << p.x << " " << p.y << "\n";
     }
-    // else if (algo == alphabeta) {
-    //     p = AlphaBeta(n_valid_spots);
-    // }
-
+    else if (algo == alphabeta) {
+        p = AlphaBetaDecision(DEPTH, fout);
+    }
+    else if (algo == negascout) {
+        p = NegaScoutDecision(DEPTH, fout);
+    }
     fout << p.x << " " << p.y << std::endl;
     fout.flush();
 }
