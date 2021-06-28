@@ -5,6 +5,8 @@
 #include <array>
 #include <vector>
 #include <cassert>
+// Timeout is set to 10 when TA test your code.
+const int timeout = 1;
 
 struct Point {
     int x, y;
@@ -43,6 +45,42 @@ public:
     int cur_player;
     bool done;
     int winner;
+    void TESTER(bool check = false) {
+        if (!check) return;
+    // board = {{  0, 0, 0, 0, 0, 0, 0, 0,
+    //             0, 0, 0, 0, 0, 2, 0, 0,
+    //             0, 0, 2, 2, 2, 1, 0, 0,
+    //             0, 0, 0, 1, 1, 0, 0, 0,
+    //             0, 0, 2, 1, 1, 0, 0, 0,
+    //             0, 0, 0, 1, 0, 1, 0, 0,
+    //             0, 0, 0, 0, 0, 0, 0, 0,
+    //             0, 0, 0, 0, 0, 0, 0, 0
+    //         }};
+
+    // board = {{  0, 0, 0, 0, 0, 0, 0, 0,
+    //             0, 0, 0, 1, 1, 0, 0, 0,
+    //             0, 0, 1, 2, 2, 2, 0, 0,
+    //             0, 1, 0, 2, 1, 0, 0, 0,
+    //             0, 0, 1, 2, 1, 1, 0, 0,
+    //             0, 0, 0, 2, 0, 0, 0, 0,
+    //             0, 0, 0, 2, 0, 0, 0, 0,
+    //             0, 0, 0, 2, 0, 0, 0, 0 
+    //         }};
+
+    board = {{
+            0, 0, 0, 1, 0, 2, 0, 0,
+            0, 0, 0, 0, 1, 2, 0, 0,
+            0, 0, 2, 1, 2, 2, 2, 0,
+            0, 0, 1, 1, 1, 0, 0, 0,
+            0, 0, 2, 2, 2, 2, 0, 0,
+            0, 0, 0, 1, 0, 1, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0
+             }};
+              
+    disc_count[0] = disc_count[1] = disc_count[2] = 0;
+    for (int i = 0; i < SIZE; i++) for (int j = 0; j < SIZE; j++) disc_count[board[i][j]]++;
+}
 private:
     int get_next_player(int player) const {
         return 3 - player;
@@ -112,24 +150,15 @@ public:
                 board[i][j] = EMPTY;
             }
         }
-        // // DEBUG START minimax wtf
-        // board= {{0, 0, 0, 0, 0, 0, 0, 0,
-        //       0, 0, 0, 0, 0, 2, 0, 0,
-        //       0, 0, 2, 2, 2, 1, 0, 0,
-        //       0, 0, 0, 1, 1, 0, 0, 0,
-        //       0, 0, 2, 1, 1, 0, 0, 0,
-        //       0, 0, 0, 1, 0, 1, 0, 0,
-        //       0, 0, 0, 0, 0, 0, 0, 0,
-        //       0, 0, 0, 0, 0, 0, 0, 0}};
-        //       disc_count[0] = disc_count[1] = disc_count[2] = 0;
-        // for (int i = 0; i < SIZE; i++) for (int j = 0; j < SIZE; j++) disc_count[board[i][j]]++;
-        // // DEBUG END
         board[3][4] = board[4][3] = BLACK;
         board[3][3] = board[4][4] = WHITE;
         cur_player = BLACK;
         disc_count[EMPTY] = 8*8-4;
         disc_count[BLACK] = 2;
         disc_count[WHITE] = 2;
+
+        TESTER();
+
         next_valid_spots = get_valid_spots();
         done = false;
         winner = -1;
@@ -243,8 +272,6 @@ public:
 const std::string file_log = "gamelog.txt";
 const std::string file_state = "state";
 const std::string file_action = "action";
-// Timeout is set to 10 when TA test your code.
-const int timeout = 1;
 
 void launch_executable(std::string filename) {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)

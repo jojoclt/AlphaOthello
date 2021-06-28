@@ -233,6 +233,8 @@ double MiniMax(ARR _board, int depth, int curPlayer) {
     if (depth == 0) return Heuristic(_board, curPlayer);
 
     vector <Point> nextMove = get_valid_spots(_board, curPlayer);
+    if (nextMove.size() == 0 && get_valid_spots(_board, get_next_player(curPlayer)).size() == 0) return 0;
+    if (nextMove.size() == 0) return MiniMax(_board, depth - 1, get_next_player(curPlayer));
     //Maximizing
     if (curPlayer == player) {
         double val = -inf;
@@ -297,6 +299,7 @@ void read_valid_spots(std::ifstream& fin)
 
 void write_valid_spot(std::ofstream& fout)
 {
+    // O is first player, X is second player
     int n_valid_spots = next_valid_spots.size();
     if (n_valid_spots == 0) return;
 
@@ -311,10 +314,9 @@ void write_valid_spot(std::ofstream& fout)
     }
     else if (algo == minimax) {
         p = MiniMaxDecision(3);
-         std::ofstream log("TRY.txt");
-         log << p.x << " " << p.y << "\n";
-        // SOMETHING WRONG WITH MINIMAX
-        // p = Point(1,3);
+        //  higher depths might run out of spaces 
+        //  std::ofstream log("TRY.txt");
+        //  log << p.x << " " << p.y << "\n";
     }
     // else if (algo == alphabeta) {
     //     p = AlphaBeta(n_valid_spots);
