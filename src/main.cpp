@@ -112,6 +112,18 @@ public:
                 board[i][j] = EMPTY;
             }
         }
+        // // DEBUG START minimax wtf
+        // board= {{0, 0, 0, 0, 0, 0, 0, 0,
+        //       0, 0, 0, 0, 0, 2, 0, 0,
+        //       0, 0, 2, 2, 2, 1, 0, 0,
+        //       0, 0, 0, 1, 1, 0, 0, 0,
+        //       0, 0, 2, 1, 1, 0, 0, 0,
+        //       0, 0, 0, 1, 0, 1, 0, 0,
+        //       0, 0, 0, 0, 0, 0, 0, 0,
+        //       0, 0, 0, 0, 0, 0, 0, 0}};
+        //       disc_count[0] = disc_count[1] = disc_count[2] = 0;
+        // for (int i = 0; i < SIZE; i++) for (int j = 0; j < SIZE; j++) disc_count[board[i][j]]++;
+        // // DEBUG END
         board[3][4] = board[4][3] = BLACK;
         board[3][3] = board[4][4] = WHITE;
         cur_player = BLACK;
