@@ -7,6 +7,7 @@
 #include <vector>
 #include<cassert>
 #include<cstring>
+#include<cstdint>
 
 #define inf 1e9
 
@@ -15,7 +16,10 @@ const int SIZE = 8;
 using ARR = std::array<std::array<int, SIZE>, SIZE>;
 using std::vector;
 
-enum Algo { purerandom, statevalue, minimax, alphabeta, alphaenhanced };
+uint64_t zobristTable[SIZE][SIZE][2];
+uint64_t hash = 0;
+
+enum Algo { purerandom, statevalue, minimax, alphabeta, mtdf };
 Algo algo = alphabeta;
 
 struct Point {
@@ -58,7 +62,7 @@ const std::array<Point, 8> directions{{
 const std::array<Point, 4> corners = {{ 
     Point(0, 0), Point(0, 7), Point(7, 0), Point(7, 7) 
 }};
-int get_next_player(int player) { return 3 - player; }
+int getNextPlayer(int player) { return 3 - player; }
 bool is_spot_on_board(Point p){ return 0 <= p.x && p.x < SIZE && 0 <= p.y && p.y < SIZE; }
 int get_disc(ARR _board, Point p) { return _board[p.x][p.y]; }
 void set_disc(ARR& _board, Point p, int disc) { _board[p.x][p.y] = disc; }
@@ -74,7 +78,7 @@ bool is_spot_valid(ARR _board, Point center, int curPlayer) {
     for (Point dir: directions) {
         // Move along the direction while testing.
         Point p = center + dir;
-        if (!is_disc_at(_board, p, get_next_player(curPlayer)))
+        if (!is_disc_at(_board, p, getNextPlayer(curPlayer)))
             continue;
         p = p + dir;
         while (is_spot_on_board(p) && get_disc(_board, p) != EMPTY) {
@@ -103,7 +107,7 @@ void flip_discs(ARR& _board, Point center, int curPlayer)
     for (Point dir : directions) {
         // Move along the direction while testing.
         Point p = center + dir;
-        if (!is_disc_at(_board, p, get_next_player(curPlayer))) continue;
+        if (!is_disc_at(_board, p, getNextPlayer(curPlayer))) continue;
         std::vector<Point> discs({p});
         p = p + dir;
         while (is_spot_on_board(p) && get_disc(_board, p) != EMPTY) {
@@ -145,18 +149,16 @@ int CountStableDisc(ARR _board, Point p, int curPlayer) {
 }
 double Heuristic(ARR _board, int curPlayer)
 {
-    memset(visit,false,sizeof(visit));
     int count[3] = {};
-    int FS[3] = {};
-    double V = 0, D = 0, C = 0, S = 0, M = 0, SS = 0, SC = 0;
+    double V = 0, D = 0, C = 0, CS = 0, MC = 0, SDC = 0;
     ARR w;
     w[0] = {20, -3, 11, 8, 8, 11, -3, 20};
-    w[1] = {-3, -7, -4, -1, -1, -4, -7, -3};
-    w[2] = {11, -4, 2, 2, 2, 2, -4, 11};
+    w[1] = {-3, -7, -3, -1, -1, -3, -7, -3};
+    w[2] = {11, -3, 2, 2, 2, 2, -3, 11};
     w[3] = {8, 1, 2, -3, -3, 2, 1, 8};
     w[4] = {8, 1, 2, -3, -3, 2, 1, 8};
-    w[5] = {11, -4, 2, 2, 2, 2, -4, 11};
-    w[6] = {-3, -7, -4, -1, -1, -4, -7, -3};
+    w[5] = {11, -3, 2, 2, 2, 2, -3, 11};
+    w[6] = {-3, -7, -3, -1, -1, -3, -7, -3};
     w[7] = {20, -3, 11, 8, 8, 11, -3, 20};
 
     // Position Values and Pieces Count
@@ -164,71 +166,51 @@ double Heuristic(ARR _board, int curPlayer)
         for (int j = 0; j < SIZE; j++) {
             if (_board[i][j] == curPlayer)
                 V += w[i][j];
-            else if (_board[i][j] == get_next_player(curPlayer))
+            else if (_board[i][j] == getNextPlayer(curPlayer))
                 V -= w[i][j];
             count[_board[i][j]]++;
-            if(_board[i][j] != EMPTY)   {
-				for(int k = 0; k < 8; k++)  {
-					Point p = Point(i,j) + directions[k];
-                    if (is_spot_on_board(p) && _board[i][j] == EMPTY) {
-                        FS[_board[i][j]]++;
-                        break;
-                    }
-				}
-			}
         }
     }
-
-    if (count[curPlayer] > count[get_next_player(curPlayer)])
+    if (count[curPlayer] > count[getNextPlayer(curPlayer)])
         D = (100.0 * count[curPlayer]) /
-            (count[curPlayer] + count[get_next_player(curPlayer)]);
-    else if (count[curPlayer] < count[get_next_player(curPlayer)])
+            (count[curPlayer] + count[getNextPlayer(curPlayer)]);
+    else if (count[curPlayer] < count[getNextPlayer(curPlayer)])
         D = -(100.0 * count[curPlayer]) /
-            (count[curPlayer] + count[get_next_player(curPlayer)]);
+            (count[curPlayer] + count[getNextPlayer(curPlayer)]);
     else
         D = 0;
 
-    // Stability
-    if (FS[curPlayer] > FS[get_next_player(curPlayer)])
-        SS = -(100.0 * FS[curPlayer]) /
-             (FS[curPlayer] + FS[get_next_player(curPlayer)]);
-    else if (FS[curPlayer] < FS[get_next_player(curPlayer)])
-        SS = (100.0 * FS[curPlayer]) /
-             (FS[curPlayer] + FS[get_next_player(curPlayer)]);
-    else
-        SS = 0;
-
-  // Count all stable disc
+    // Count all stable disc
     count[1] = count[2] = 0;
-    for (int i = 1; i <= 2; i++) {
+    for (int ply = 1; ply <= 2; ply++) {
         memset(visit,false,sizeof(visit));
         for (Point p : corners) {
-            if (_board[p.x][p.y] == i){
-                count[i] += CountStableDisc(_board, p, i);
+            if (_board[p.x][p.y] == ply){
+                count[ply] += CountStableDisc(_board, p, ply);
             }
         }
     }
-    if (count[curPlayer] > count[get_next_player(curPlayer)])
-        SC = (100.0 * count[curPlayer]) /
-             (count[curPlayer] + count[get_next_player(curPlayer)]);
-    else if (count[curPlayer] < count[get_next_player(curPlayer)])
-        SC = (100.0 * count[curPlayer]) /
-             (count[curPlayer] + count[get_next_player(curPlayer)]);
+    if (count[curPlayer] > count[getNextPlayer(curPlayer)])
+        SDC = (100.0 * count[curPlayer]) /
+             (count[curPlayer] + count[getNextPlayer(curPlayer)]);
+    else if (count[curPlayer] < count[getNextPlayer(curPlayer)])
+        SDC = (100.0 * count[curPlayer]) /
+             (count[curPlayer] + count[getNextPlayer(curPlayer)]);
     else
-        SC = 0;
+        SDC = 0;
 
     // Valid Moves Count
     count[curPlayer] = get_valid_spots(_board, curPlayer).size();
-    count[get_next_player(curPlayer)] =
-        get_valid_spots(_board, get_next_player(curPlayer)).size();
-    if (count[curPlayer] > count[get_next_player(curPlayer)])
-        M = (100.0 * count[curPlayer]) /
-            (count[curPlayer] + count[get_next_player(curPlayer)]);
-    else if (count[curPlayer] < count[get_next_player(curPlayer)])
-        M = -(100.0 * count[curPlayer]) /
-            (count[curPlayer] + count[get_next_player(curPlayer)]);
+    count[getNextPlayer(curPlayer)] =
+        get_valid_spots(_board, getNextPlayer(curPlayer)).size();
+    if (count[curPlayer] > count[getNextPlayer(curPlayer)])
+        MC = (100.0 * count[curPlayer]) /
+            (count[curPlayer] + count[getNextPlayer(curPlayer)]);
+    else if (count[curPlayer] < count[getNextPlayer(curPlayer)])
+        MC = -(100.0 * count[curPlayer]) /
+            (count[curPlayer] + count[getNextPlayer(curPlayer)]);
     else
-        M = 0;
+        MC = 0;
 
     // Corner Stability
     count[1] = count[2] = 0;
@@ -241,7 +223,7 @@ double Heuristic(ARR _board, int curPlayer)
         }
     }
 
-    S = -12.25 * (count[curPlayer] - count[get_next_player(curPlayer)]);
+    CS = -12.25 * (count[curPlayer] - count[getNextPlayer(curPlayer)]);
     
     // Corners Captured
     count[1] = count[2] = 0;
@@ -249,9 +231,9 @@ double Heuristic(ARR _board, int curPlayer)
         count[_board[c.x][c.y]]++;
 
 
-    C = 25 * (count[curPlayer] - count[get_next_player(curPlayer)]);
+    C = 25 * (count[curPlayer] - count[getNextPlayer(curPlayer)]);
 
-    double score = (10 * V) + (10 * D) + (78.922 * M) + (382.026 * S) + (801.724 * C) + (74.396 * SS) + (301.25 * SC);
+    double score = (10 * V) + (10 * D) + (78.922 * MC) + (382.026 * CS) + (801.724 * C) + (301.25 * SDC);
     return score;
 }
 Point StateValue()
@@ -269,14 +251,14 @@ double MiniMax(ARR _board, int depth, int curPlayer) {
 
     vector <Point> nextMove = get_valid_spots(_board, curPlayer);
 
-    if (nextMove.size() == 0) return MiniMax(_board, depth - 1, get_next_player(curPlayer));
+    if (nextMove.size() == 0) return MiniMax(_board, depth - 1, getNextPlayer(curPlayer));
     //Maximizing
     if (curPlayer == player) {
         double val = -inf;
         for (Point p : nextMove) {
             ARR _state = _board;
             put_disc(_state, p, curPlayer);
-            val = std::max(val, MiniMax(_state, depth - 1, get_next_player(curPlayer)));
+            val = std::max(val, MiniMax(_state, depth - 1, getNextPlayer(curPlayer)));
         }
         return val;
     }
@@ -286,7 +268,7 @@ double MiniMax(ARR _board, int depth, int curPlayer) {
         for (Point p : nextMove) {
             ARR _state = _board;
             put_disc(_state, p , curPlayer);
-            val = std::min(val, MiniMax(_state, depth - 1, get_next_player(curPlayer)));
+            val = std::min(val, MiniMax(_state, depth - 1, getNextPlayer(curPlayer)));
         }
         return val;
     }
@@ -297,7 +279,7 @@ Point MiniMaxDecision(int depth, std::ofstream& fout) {
     for (auto p : next_valid_spots) {
         ARR _state = board;
         put_disc(_state, p , player);
-        double tmp = MiniMax(_state, depth, get_next_player(player));
+        double tmp = MiniMax(_state, depth, getNextPlayer(player));
 
         if (tmp > bestVal) {
             bestMove = p;
@@ -311,14 +293,14 @@ double AlphaBeta(ARR _board, int depth, int curPlayer, double a, double b) {
     if (depth == 0) return Heuristic(_board, curPlayer);
 
     vector <Point> nextMove = get_valid_spots(_board, curPlayer);
-    if (nextMove.size() == 0) return AlphaBeta(_board, depth - 1, get_next_player(curPlayer), a, b);
+    if (nextMove.size() == 0) return AlphaBeta(_board, depth - 1, getNextPlayer(curPlayer), a, b);
     //Maximizing
     if (curPlayer == player) {
         double val = -inf;
         for (Point p : nextMove) {
             ARR _state = _board;
             put_disc(_state, p, curPlayer);
-            val = std::max(val, AlphaBeta(_state, depth - 1, get_next_player(curPlayer), a, b));
+            val = std::max(val, AlphaBeta(_state, depth - 1, getNextPlayer(curPlayer), a, b));
 
             if (val >= b) break;
             a = std::max(a, val);
@@ -331,7 +313,7 @@ double AlphaBeta(ARR _board, int depth, int curPlayer, double a, double b) {
         for (Point p : nextMove) {
             ARR _state = _board;
             put_disc(_state, p , curPlayer);
-            val = std::min(val, AlphaBeta(_state, depth - 1, get_next_player(curPlayer), a, b));
+            val = std::min(val, AlphaBeta(_state, depth - 1, getNextPlayer(curPlayer), a, b));
 
             if (val <= a) break;
             b = std::min(b, val);
@@ -345,7 +327,7 @@ Point AlphaBetaDecision(int depth, std::ofstream& fout) {
     for (auto p : next_valid_spots) {
         ARR _state = board;
         put_disc(_state, p , player);
-        double tmp = AlphaBeta(_state, depth, get_next_player(player), -inf, inf);
+        double tmp = AlphaBeta(_state, depth, getNextPlayer(player), -inf, inf);
 
         if (tmp > bestVal) {
             bestMove = p;
@@ -355,18 +337,24 @@ Point AlphaBetaDecision(int depth, std::ofstream& fout) {
     }
     return bestMove;
 }
+/*----------------------------------------------------------------
 double AlphaTabl(ARR _board, int depth, int curPlayer, double a, double b) {
+    // Transposition Table Lookup
+    if (Retrieve(_board)) {
+
+    }
+    
     if (depth == 0) return Heuristic(_board, curPlayer);
 
     vector <Point> nextMove = get_valid_spots(_board, curPlayer);
-    if (nextMove.size() == 0) return AlphaBeta(_board, depth - 1, get_next_player(curPlayer), a, b);
+    if (nextMove.size() == 0) return AlphaBeta(_board, depth - 1, getNextPlayer(curPlayer), a, b);
     //Maximizing
     if (curPlayer == player) {
         double val = -inf;
         for (Point p : nextMove) {
             ARR _state = _board;
             put_disc(_state, p, curPlayer);
-            val = std::max(val, AlphaBeta(_state, depth - 1, get_next_player(curPlayer), a, b));
+            val = std::max(val, AlphaBeta(_state, depth - 1, getNextPlayer(curPlayer), a, b));
 
             if (val >= b) break;
             a = std::max(a, val);
@@ -379,7 +367,7 @@ double AlphaTabl(ARR _board, int depth, int curPlayer, double a, double b) {
         for (Point p : nextMove) {
             ARR _state = _board;
             put_disc(_state, p , curPlayer);
-            val = std::min(val, AlphaBeta(_state, depth - 1, get_next_player(curPlayer), a, b));
+            val = std::min(val, AlphaBeta(_state, depth - 1, getNextPlayer(curPlayer), a, b));
 
             if (val <= a) break;
             b = std::min(b, val);
@@ -387,23 +375,31 @@ double AlphaTabl(ARR _board, int depth, int curPlayer, double a, double b) {
         return val;
     }
 }
-Point AlphaTablDecision(int depth, std::ofstream& fout) {
-     double bestVal = -inf;
+double MTDF(int f, int depth, std::ofstream& fout) {
+    // double lowerBound = -inf, upperBound = inf;
+    // double g = d;
+    // hash = computeBoardHash();
+    // for (auto p : next_valid_spots) {
+    //     ARR _state = board;
+    //     put_disc(_state, p , player);
+    //     double tmp = AlphaTabl(_state, depth, getNextPlayer(player), -inf, inf);
 
-    for (auto p : next_valid_spots) {
-        ARR _state = board;
-        put_disc(_state, p , player);
-        double tmp = AlphaTabl(_state, depth, get_next_player(player), -inf, inf);
-
-        if (tmp > bestVal) {
-            bestMove = p;
-            bestVal = tmp;
-        }
-        fout << bestMove.x << " " << bestMove.y << "\n";
-    }
-    return bestMove;
+    //     if (tmp > bestVal) {
+    //         bestMove = p;
+    //         bestVal = tmp;
+    //     }
+    //     fout << bestMove.x << " " << bestMove.y << "\n";
+    // }
+    // return bestMove;
 }
-
+Point MTDFDecision(int depth, std::ostream& fout) {
+    // double guess = 0;
+    // Point bestMove
+    // for (int d = 1; d <= depth; d++) {
+    //     guess = MTDF
+    // }
+}
+*/
 void read_board(std::ifstream& fin)
 {
     fin >> player;
@@ -428,13 +424,10 @@ void read_valid_spots(std::ifstream& fin)
 void write_valid_spot(std::ofstream& fout)
 {
     // O is first player, X is second player
-    int n_valid_spots = next_valid_spots.size();
-    if (n_valid_spots == 0) return;
-
     Point p;
     if (algo == purerandom) {
         srand(time(NULL));
-        int index = (rand() % n_valid_spots);
+        int index = (rand() % next_valid_spots.size());
         p = next_valid_spots[index];
     }
     else if (algo == statevalue) {
@@ -447,8 +440,8 @@ void write_valid_spot(std::ofstream& fout)
     else if (algo == alphabeta) {
         p = AlphaBetaDecision(DEPTH, fout);
     }
-    else if (algo == alphaenhanced) {
-        p = AlphaTablDecision(DEPTH, fout);
+    else if (algo == mtdf) {
+        // p = MTDFDecision(DEPTH, fout);
     }
     fout << p.x << " " << p.y << std::endl;
     fout.flush();
