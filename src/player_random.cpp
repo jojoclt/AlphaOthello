@@ -6,6 +6,7 @@
 #include <queue>
 #include <vector>
 #include<cassert>
+#include<cstring>
 
 #define inf 1e9
 
@@ -54,6 +55,9 @@ const std::array<Point, 8> directions{{
         Point(0, -1), /*{0, 0}, */Point(0, 1),
         Point(1, -1), Point(1, 0), Point(1, 1)
     }};
+const std::array<Point, 4> corners = {{ 
+    Point(0, 0), Point(0, 7), Point(7, 0), Point(7, 7) 
+}};
 int get_next_player(int player) { return 3 - player; }
 bool is_spot_on_board(Point p){ return 0 <= p.x && p.x < SIZE && 0 <= p.y && p.y < SIZE; }
 int get_disc(ARR _board, Point p) { return _board[p.x][p.y]; }
@@ -114,25 +118,45 @@ void flip_discs(ARR& _board, Point center, int curPlayer)
         }
     }
 }
-// Put disc on board and call flip
 void put_disc(ARR& _board, Point p, int curPlayer)
 {
     set_disc(_board, p, curPlayer);
     flip_discs(_board, p, curPlayer);
 }
+bool visit[SIZE][SIZE] = {};
+int CountStableDisc(ARR _board, Point p, int curPlayer) {
+    std::queue <Point> q;
+    q.push(p);
+    int cnt = 0;
+    while (!q.empty()) {
+        Point p = q.front(); q.pop();
+        if (visit[p.x][p.y]) continue;
+        for (int i = 1; i <= 7; i += 2) {
+            Point t = p + directions[i];
+            if (!is_spot_on_board(t)) continue;
+            if (visit[t.x][t.y]) continue;
+            visit[t.x][t.y] = true;
+            if (_board[t.x][t.y] != curPlayer) continue;
+            ++cnt;
+            q.push(t);
+        }
+    }
+    return cnt;
+}
 double Heuristic(ARR _board, int curPlayer)
 {
+    memset(visit,false,sizeof(visit));
     int count[3] = {};
     int FS[3] = {};
-    double V = 0, D = 0, C = 0, S = 0, M = 0, SS = 0;
+    double V = 0, D = 0, C = 0, S = 0, M = 0, SS = 0, SC = 0;
     std::array<std::array<int, SIZE>, SIZE> w;
     w[0] = {20, -3, 11, 8, 8, 11, -3, 20};
-    w[1] = {-3, -7, -4, 1, 1, -4, -7, -3};
+    w[1] = {-3, -7, -4, -1, -1, -4, -7, -3};
     w[2] = {11, -4, 2, 2, 2, 2, -4, 11};
     w[3] = {8, 1, 2, -3, -3, 2, 1, 8};
     w[4] = {8, 1, 2, -3, -3, 2, 1, 8};
     w[5] = {11, -4, 2, 2, 2, 2, -4, 11};
-    w[6] = {-3, -7, -4, 1, 1, -4, -7, -3};
+    w[6] = {-3, -7, -4, -1, -1, -4, -7, -3};
     w[7] = {20, -3, 11, 8, 8, 11, -3, 20};
 
     // Position Values and Pieces Count
@@ -154,6 +178,7 @@ double Heuristic(ARR _board, int curPlayer)
 			}
         }
     }
+
     if (count[curPlayer] > count[get_next_player(curPlayer)])
         D = (100.0 * count[curPlayer]) /
             (count[curPlayer] + count[get_next_player(curPlayer)]);
@@ -173,6 +198,24 @@ double Heuristic(ARR _board, int curPlayer)
     else
         SS = 0;
 
+  // Count all stable disc
+    count[1] = count[2] = 0;
+    for (int i = 1; i <= 2; i++) {
+        memset(visit,false,sizeof(visit));
+        for (Point p : corners) {
+            if (_board[p.x][p.y] == i)
+                count[i] += CountStableDisc(_board, p, i);
+        }
+    }
+    if (count[curPlayer] > count[get_next_player(curPlayer)])
+        SC = (100.0 * count[curPlayer]) /
+             (count[curPlayer] + count[get_next_player(curPlayer)]);
+    else if (count[curPlayer] < count[get_next_player(curPlayer)])
+        SC = (100.0 * count[curPlayer]) /
+             (count[curPlayer] + count[get_next_player(curPlayer)]);
+    else
+        SC = 0;
+
     // Valid Moves Count
     count[curPlayer] = get_valid_spots(_board, curPlayer).size();
     count[get_next_player(curPlayer)] =
@@ -188,37 +231,26 @@ double Heuristic(ARR _board, int curPlayer)
 
     // Corner Stability
     count[1] = count[2] = 0;
-    if (_board[0][0] == EMPTY) {
-        count[_board[0][1]]++;
-        count[_board[1][1]]++;
-        count[_board[1][0]]++;
+    for (Point c : corners) {
+        if (_board[c.x][c.y] == EMPTY) {
+            for (int j = 1; j <= 7; j += 2) {
+                Point p = c + directions[j];
+                if (is_spot_on_board(p)) count[_board[p.x][p.y]]++;
+            }
+        }
     }
-    if (_board[0][7] == EMPTY) {
-        count[_board[0][6]]++;
-        count[_board[1][6]]++;
-        count[_board[1][7]]++;
-    }
-    if (_board[7][0] == EMPTY) {
-        count[_board[7][1]]++;
-        count[_board[6][1]]++;
-        count[_board[6][0]]++;
-    }
-    if (_board[7][7] == EMPTY) {
-        count[_board[6][7]]++;
-        count[_board[6][6]]++;
-        count[_board[7][6]]++;
-    }
+
     S = -12.25 * (count[curPlayer] - count[get_next_player(curPlayer)]);
+    
     // Corners Captured
     count[1] = count[2] = 0;
-    count[_board[0][0]]++;
-    count[_board[0][7]]++;
-    count[_board[7][0]]++;
-    count[_board[7][7]]++;
+    for (Point c : corners)
+        count[_board[c.x][c.y]]++;
+
 
     C = 25 * (count[curPlayer] - count[get_next_player(curPlayer)]);
 
-    double score = (10 * V) + (10 * D) + (78.922 * M) + (382.026 * S) + (801.724 * C) + (74.396 * SS);
+    double score = (10 * V) + (10 * D) + (78.922 * M) + (382.026 * S) + (801.724 * C) + (74.396 * SS) + (301.25 * SC);
     return score;
 }
 Point StateValue()
@@ -326,13 +358,28 @@ double NegaScout(ARR _board, int depth, int curPlayer, double a, double b) {
      if (depth == 0) return Heuristic(_board, curPlayer);
 
     vector <Point> nextMove = get_valid_spots(_board, curPlayer);
-    if (nextMove.size() == 0 && get_valid_spots(_board, get_next_player(curPlayer)).size() == 0) return 0;
     if (nextMove.size() == 0) return AlphaBeta(_board, depth - 1, get_next_player(curPlayer), a, b);
     
-    for (Point p : nextMove) {
+    double score = -inf;
 
+    for (Point p : nextMove) {
+        ARR _state = _board;
+        put_disc(_state, p, curPlayer);
+        if (depth == DEPTH - 1)
+            score = -NegaScout(_state, depth - 1, get_next_player(curPlayer), -b, -a);
+
+        else {
+            score = -NegaScout(_state, depth - 1, get_next_player(curPlayer), -a - 1, -a);
+            // failed, do a full search
+            if (score > a && score < b) {
+                score = -NegaScout(_state, depth - 1, get_next_player(curPlayer), -b, -score);
+            }
+        }
+
+        if (score > a) a = score;
+        if (a >= b) return a;
     }
-   
+   return a;
 }
 Point NegaScoutDecision(int depth,std::ofstream& fout) {
       double bestVal = -inf;
@@ -399,7 +446,6 @@ void write_valid_spot(std::ofstream& fout)
     fout << p.x << " " << p.y << std::endl;
     fout.flush();
 }
-
 int main(int, char** argv)
 {
     std::ifstream fin(argv[1]);
