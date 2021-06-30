@@ -187,7 +187,7 @@ int countStableDisc(ARR _board, Point p, int ply) {
 double Heuristic(ARR _board, int curPlayer)
 {
     int count[3] = {};
-    double V = 0, D = 0, C = 0, CS = 0, MC = 0, SDC = 0;
+    double V = 0, D = 0, C = 0, CS = 0, MC = 0;
     ARR w;
     w[0] = {20, -3, 11, 8, 8, 11, -3, 20};
     w[1] = {-3, -7, -3, -1, -1, -3, -7, -3};
@@ -209,48 +209,25 @@ double Heuristic(ARR _board, int curPlayer)
         }
     }
     // DISC COUNT
-    if (count[curPlayer] > count[getNextPlayer(curPlayer)])
-        D = (100.0 * count[curPlayer]) /
+    if (count[curPlayer] == count[getNextPlayer(curPlayer)]) D = 0;
+    else {
+        D = (count[curPlayer] - count[getNextPlayer(curPlayer)]) /
             (count[curPlayer] + count[getNextPlayer(curPlayer)]);
-    else if (count[curPlayer] < count[getNextPlayer(curPlayer)])
-        D = -(100.0 * count[curPlayer]) /
-            (count[curPlayer] + count[getNextPlayer(curPlayer)]);
-    else
-        D = 0;
+        // if (count[curPlayer] < count[getNextPlayer(curPlayer)])
+        //     D = -D;
+    }
 
-    // Kinda Stable
-    count[1] = count[2] = 0;
-                // std::ofstream log("TRY.txt");
-    // for (int ply = 1; ply <= 2; ply++) {
-    //     memset(visit,false,sizeof(visit));
-    //     for (Point p : corners) {
-    //         if (_board[p.x][p.y] == ply){
-    //             count[ply] += countStableDisc(_board, p, ply);
-    //             // log << count[ply]<< " ";
-                
-    //         }
-    //     }
-    // }
-    if (count[curPlayer] > count[getNextPlayer(curPlayer)])
-        SDC = (100.0 * count[curPlayer]) /
-             (count[curPlayer] + count[getNextPlayer(curPlayer)]);
-    else if (count[curPlayer] < count[getNextPlayer(curPlayer)])
-        SDC = (100.0 * count[curPlayer]) /
-             (count[curPlayer] + count[getNextPlayer(curPlayer)]);
-    else
-        SDC = 0;
     // Valid Moves Count
     count[curPlayer] = get_valid_spots(_board, curPlayer).size();
     count[getNextPlayer(curPlayer)] =
         get_valid_spots(_board, getNextPlayer(curPlayer)).size();
-    if (count[curPlayer] > count[getNextPlayer(curPlayer)])
-        MC = (100.0 * count[curPlayer]) /
+    if (count[curPlayer] == count[getNextPlayer(curPlayer)]) MC = 0;
+    else {
+        MC = (count[curPlayer] - count[getNextPlayer(curPlayer)]) /
             (count[curPlayer] + count[getNextPlayer(curPlayer)]);
-    else if (count[curPlayer] < count[getNextPlayer(curPlayer)])
-        MC = -(100.0 * count[curPlayer]) /
-            (count[curPlayer] + count[getNextPlayer(curPlayer)]);
-    else
-        MC = 0;
+        // if (count[curPlayer] < count[getNextPlayer(curPlayer)])
+        //     MC = -MC;
+    }
 
     // Corner Instability
     count[1] = count[2] = 0;
@@ -273,7 +250,7 @@ double Heuristic(ARR _board, int curPlayer)
 
     C = 25 * (count[curPlayer] - count[getNextPlayer(curPlayer)]);
 
-    double score = (10 * V) + (11 * D) + (80 * MC) + (375.78 * CS) + (805.131 * C) + (100.25 * SDC);
+    double score = (14 * V) + (204.451 * D) + (541 * MC) + (375.78 * CS) + (805.131 * C);
     return score;
 }
 Point StateValue()
@@ -469,22 +446,23 @@ void write_valid_spot(std::ofstream& fout)
 {
     // O is first player, X is second player
     Point p;
-    if (algo == purerandom) {
+    if (algo == purerandom || true) {
         srand(time(NULL));
         int index = (rand() % next_valid_spots.size());
         p = next_valid_spots[index];
+         fout << p.x << " " << p.y << std::endl;
     }
-    else if (algo == statevalue) {
+    if (algo == statevalue) {
         p = StateValue();
     }
-    else if (algo == minimax) {
+    if (algo == minimax) {
         p = MiniMaxDecision(DEPTH, fout);
         //  higher depths might run out of spaces 
     }
-    else if (algo == alphabeta) {
+    if (algo == alphabeta) {
         p = AlphaBetaDecision(DEPTH, fout);
     }
-    else if (algo == mtdf) {
+    if (algo == mtdf) {
         // p = MTDFDecision(DEPTH, fout);
     }
     fout << p.x << " " << p.y << std::endl;
