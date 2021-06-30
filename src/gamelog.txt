@@ -19,8 +19,8 @@ X's turn
 +---------------+
 |               |
 |               |
-|    . O .      |
-|      O O      |
+|    .   .      |
+|    O O O      |
 |    . O X      |
 |               |
 |               |
@@ -33,881 +33,881 @@ O: 3; X: 3
 O's turn
 +---------------+
 |               |
-|               |
-|      O        |
-|      O O      |
-|    X X X      |
-|  . . . . .    |
+|    .          |
+|    X .        |
+|    O X O      |
+|      O X .    |
+|        .      |
 |               |
 |               |
 +---------------+
-5 valid moves: {(5,1), (5,2), (5,3), (5,4), (5,5)}
+4 valid moves: {(1,2), (2,3), (4,5), (5,4)}
 =================
 Timestep #4
 O: 5; X: 2
 X's turn
 +---------------+
 |               |
-|      .        |
-|      O . .    |
-|      O O      |
-|    X X O .    |
-|          O    |
+|               |
+|    X O .      |
+|    O O O      |
+|    . O X      |
+|               |
 |               |
 |               |
 +---------------+
-4 valid moves: {(1,3), (2,4), (2,5), (4,5)}
+2 valid moves: {(2,4), (4,2)}
 =================
 Timestep #5
-O: 4; X: 4
+O: 3; X: 5
 O's turn
 +---------------+
 |               |
-|               |
-|      O        |
-|      O O .    |
-|    X X X X    |
-|  . . . . O .  |
+|  .            |
+|  . X O        |
+|  . X O O      |
+|  . X X X      |
+|  . . . . .    |
 |               |
 |               |
 +---------------+
-6 valid moves: {(3,5), (5,1), (5,2), (5,3), (5,4), (5,6)}
+9 valid moves: {(1,1), (2,1), (3,1), (4,1), (5,1), (5,2), (5,3), (5,4), (5,5)}
 =================
 Timestep #6
-O: 6; X: 3
+O: 5; X: 4
 X's turn
 +---------------+
 |               |
-|    . .        |
-|      O . .    |
-|      O O      |
-|    X X O X    |
-|        O O    |
-|      .   .    |
+|      .        |
+|  . X O . .    |
+|    O O O      |
+|. O X X X      |
+|               |
+|               |
 |               |
 +---------------+
-6 valid moves: {(1,2), (1,3), (2,4), (2,5), (6,3), (6,5)}
+5 valid moves: {(1,3), (2,1), (2,4), (2,5), (4,0)}
 =================
 Timestep #7
 O: 4; X: 6
 O's turn
 +---------------+
 |               |
+|  . .          |
+|  . X O        |
+|    O O O      |
+|X X X X X      |
+|. . . . . .    |
 |               |
-|      O        |
-|      O O      |
-|  . X X O X .  |
-|  . . . X X .  |
-|        . X .  |
 |               |
 +---------------+
-8 valid moves: {(4,1), (4,6), (5,1), (5,2), (5,3), (5,6), (6,4), (6,6)}
+9 valid moves: {(1,1), (1,2), (2,1), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5)}
 =================
 Timestep #8
 O: 6; X: 5
 X's turn
 +---------------+
 |               |
-|    .          |
-|    . O .      |
-|    . O O      |
-|    X O O X    |
-|    . O X X    |
-|        . X    |
+|      .        |
+|  . X O . .    |
+|    O O O      |
+|X O X X X      |
+|O              |
+|.              |
 |               |
 +---------------+
-6 valid moves: {(1,2), (2,2), (2,4), (3,2), (5,2), (6,4)}
+5 valid moves: {(1,3), (2,1), (2,4), (2,5), (6,0)}
 =================
 Timestep #9
-O: 4; X: 8
+O: 5; X: 7
 O's turn
 +---------------+
 |               |
-|    X .        |
-|      X . .    |
-|  .   O X .    |
-|  . X O O X .  |
-|  .   O X X .  |
-|        . X .  |
-|            .  |
+|  . .          |
+|  . X O        |
+|    O O O      |
+|X O X X X .    |
+|X . . . . .    |
+|X              |
+|               |
 +---------------+
-12 valid moves: {(1,3), (2,4), (2,5), (3,1), (3,5), (4,1), (4,6), (5,1), (5,6), (6,4), (6,6), (7,6)}
+9 valid moves: {(1,1), (1,2), (2,1), (4,5), (5,1), (5,2), (5,3), (5,4), (5,5)}
 =================
 Timestep #10
-O: 6; X: 7
+O: 7; X: 6
 X's turn
 +---------------+
 |               |
-|    X   . .    |
-|    . X O .    |
-|    . O O      |
-|    X O O X    |
-|    . O X X    |
-|      . . X    |
+|        .      |
+|    X O .      |
+|    O O O      |
+|X O X O X      |
+|X     O        |
+|X   .   .      |
 |               |
 +---------------+
-8 valid moves: {(1,4), (1,5), (2,2), (2,5), (3,2), (5,2), (6,3), (6,4)}
+4 valid moves: {(1,4), (2,4), (6,2), (6,4)}
 =================
 Timestep #11
-O: 3; X: 11
+O: 6; X: 8
 O's turn
 +---------------+
-|  .            |
-|    X          |
-|    . X O      |
-|    . X O      |
-|  . X X O X .  |
-|  . . X X X .  |
-|    . X . X .  |
+|               |
+|  . .          |
+|  . X O        |
+|    O O O      |
+|X O X O X .    |
+|X . . X . .    |
+|X     . X      |
 |               |
 +---------------+
-11 valid moves: {(0,1), (2,2), (3,2), (4,1), (4,6), (5,1), (5,2), (5,6), (6,2), (6,4), (6,6)}
+9 valid moves: {(1,1), (1,2), (2,1), (4,5), (5,1), (5,2), (5,4), (5,5), (6,3)}
 =================
 Timestep #12
-O: 5; X: 10
+O: 8; X: 7
 X's turn
 +---------------+
 |               |
-|    X   . .    |
-|  . . X O .    |
-|    O O O .    |
-|  . X X O X    |
-|      X X X    |
-|      X   X    |
+|        .      |
+|    X O .      |
+|    O O O      |
+|X O X O X      |
+|X     O        |
+|X   . O X      |
 |               |
 +---------------+
-7 valid moves: {(1,4), (1,5), (2,1), (2,2), (2,5), (3,5), (4,1)}
+3 valid moves: {(1,4), (2,4), (6,2)}
 =================
 Timestep #13
-O: 2; X: 14
+O: 5; X: 11
 O's turn
 +---------------+
-|  .            |
-|    X          |
-|  . X X O      |
-|  . X X O      |
-|    X X X X    |
-|  . . X X X .  |
-|      X . X    |
 |               |
+|  . . . X      |
+|  . X X        |
+|  . X O O .    |
+|X X X O X .    |
+|X .   O . .    |
+|X     O X .    |
+|          .    |
 +---------------+
-7 valid moves: {(0,1), (2,1), (3,1), (5,1), (5,2), (5,6), (6,4)}
+12 valid moves: {(1,1), (1,2), (1,3), (2,1), (3,1), (3,5), (4,5), (5,1), (5,4), (5,5), (6,5), (7,5)}
 =================
 Timestep #14
-O: 4; X: 13
+O: 8; X: 9
 X's turn
 +---------------+
 |               |
-|    X   . .    |
-|    X X O .    |
-|    X X O .    |
-|  . X O X X    |
-|  . O X X X    |
-|    . X   X    |
-|               |
+|        X      |
+|. . X X .      |
+|  O O O O      |
+|X X O O X .    |
+|X   . O        |
+|X   . O X      |
+|      .        |
 +---------------+
-7 valid moves: {(1,4), (1,5), (2,5), (3,5), (4,1), (5,1), (6,2)}
+7 valid moves: {(2,0), (2,1), (2,4), (4,5), (5,2), (6,2), (7,3)}
 =================
 Timestep #15
-O: 3; X: 15
+O: 6; X: 12
 O's turn
 +---------------+
-|  .            |
-|    X .        |
-|  . X X O      |
-|  . X X O      |
-|. X X O X X .  |
-|  . X X X X .  |
-|  .   X . X    |
-|      .     .  |
+|               |
+|  . . . X      |
+|  . X X        |
+|. O X O O .    |
+|X X X O X .    |
+|X . X O . .    |
+|X .   O X .    |
+|          .    |
 +---------------+
-12 valid moves: {(0,1), (1,3), (2,1), (3,1), (4,0), (4,6), (5,1), (5,6), (6,1), (6,4), (7,3), (7,6)}
+13 valid moves: {(1,1), (1,2), (1,3), (2,1), (3,0), (3,5), (4,5), (5,1), (5,4), (5,5), (6,1), (6,5), (7,5)}
 =================
 Timestep #16
-O: 6; X: 13
+O: 9; X: 10
 X's turn
 +---------------+
 |               |
-|    X     .    |
-|    X X O .    |
-|    X X O .    |
-|  X X O O X    |
-|    X X O X    |
-|      X O X    |
-|      .   .    |
+|        X      |
+|.   X X .      |
+|O O X O O .    |
+|X O X O X .    |
+|X   O O .      |
+|X   . O X      |
+|      .        |
 +---------------+
-5 valid moves: {(1,5), (2,5), (3,5), (7,3), (7,5)}
+7 valid moves: {(2,0), (2,4), (3,5), (4,5), (5,4), (6,2), (7,3)}
 =================
 Timestep #17
-O: 3; X: 17
+O: 8; X: 12
 O's turn
 +---------------+
-|               |
-|  . X   .      |
-|  . X X X X    |
-|  . X X X   .  |
-|. X X X O X .  |
-|  . X X O X .  |
-|    . X O X .  |
-|    .       .  |
+|          .    |
+|  . . . X      |
+|    X X        |
+|O O X O O .    |
+|X O X X X .    |
+|X . O O X .    |
+|X     O X .    |
+|.       . .    |
 +---------------+
-13 valid moves: {(1,1), (1,4), (2,1), (3,1), (3,6), (4,0), (4,6), (5,1), (5,6), (6,2), (6,6), (7,2), (7,6)}
+12 valid moves: {(0,5), (1,1), (1,2), (1,3), (3,5), (4,5), (5,1), (5,5), (6,5), (7,0), (7,4), (7,5)}
 =================
 Timestep #18
-O: 6; X: 15
+O: 12; X: 9
 X's turn
 +---------------+
 |               |
-|    X          |
-|  . X X X X    |
-|. O X X X      |
-|. X O X O X    |
-|  . X O O X    |
-|      X O X    |
-|      . .      |
+|        X      |
+|.   X X . .    |
+|O O X O O .    |
+|O O X X X .    |
+|O . O O X      |
+|O . . O X      |
+|O   . .        |
 +---------------+
-6 valid moves: {(2,1), (3,0), (4,0), (5,1), (7,3), (7,4)}
+10 valid moves: {(2,0), (2,4), (2,5), (3,5), (4,5), (5,1), (6,1), (6,2), (7,2), (7,3)}
 =================
 Timestep #19
-O: 3; X: 19
+O: 10; X: 12
 O's turn
 +---------------+
-|    .          |
-|    X .   .    |
-|    X X X X    |
-|  O X X X .    |
-|. X O X X X .  |
-|  . X O X X .  |
-|    . X X X    |
-|      . X .    |
+|          .    |
+|  . . . X      |
+|    X X        |
+|O O X O O      |
+|O O X X X .    |
+|O . O X X .    |
+|O     X X      |
+|O     X . .    |
 +---------------+
-11 valid moves: {(0,2), (1,3), (1,5), (3,5), (4,0), (4,6), (5,1), (5,6), (6,2), (7,3), (7,5)}
+9 valid moves: {(0,5), (1,1), (1,2), (1,3), (4,5), (5,1), (5,5), (7,4), (7,5)}
 =================
 Timestep #20
-O: 8; X: 15
+O: 12; X: 11
 X's turn
 +---------------+
 |               |
-|    X          |
-|. . X X X X    |
-|  O O O O O    |
-|. X O X O X .  |
-|  . X O X X    |
-|      X X X    |
 |        X      |
+|.   X X . .    |
+|O O X O O .    |
+|O O O X X .    |
+|O O O X X      |
+|O . . X X      |
+|O     X        |
 +---------------+
-5 valid moves: {(2,0), (2,1), (4,0), (4,6), (5,1)}
+7 valid moves: {(2,0), (2,4), (2,5), (3,5), (4,5), (6,1), (6,2)}
 =================
 Timestep #21
-O: 5; X: 19
+O: 10; X: 14
 O's turn
 +---------------+
-|  . .          |
-|  . X . . . .  |
-|X   X X X X    |
-|. X O O O O    |
-|. X X X O X .  |
-|. . X X X X .  |
-|  . . X X X .  |
-|      . X . .  |
+|          .    |
+|    . . X      |
+|    X X . .    |
+|O O X X X X .  |
+|O O O X X .    |
+|O O O X X .    |
+|O     X X      |
+|O     X . .    |
 +---------------+
-19 valid moves: {(0,1), (0,2), (1,1), (1,3), (1,4), (1,5), (1,6), (3,0), (4,0), (4,6), (5,0), (5,1), (5,6), (6,1), (6,2), (6,6), (7,3), (7,5), (7,6)}
+10 valid moves: {(0,5), (1,2), (1,3), (2,4), (2,5), (3,6), (4,5), (5,5), (7,4), (7,5)}
 =================
 Timestep #22
-O: 9; X: 16
+O: 13; X: 12
 X's turn
 +---------------+
 |               |
-|    X          |
-|X . X X X X .  |
-|. X O O O O .  |
-|O O O O O X .  |
-|. . X X X X    |
-|      X X X    |
 |        X      |
+|    X X        |
+|O O X X X X    |
+|O O O X X      |
+|O O O O X .    |
+|O . . X O .    |
+|O     X . O    |
 +---------------+
-7 valid moves: {(2,1), (2,6), (3,0), (3,6), (4,6), (5,0), (5,1)}
+5 valid moves: {(5,5), (6,1), (6,2), (6,5), (7,4)}
 =================
 Timestep #23
-O: 6; X: 20
+O: 12; X: 14
 O's turn
 +---------------+
-|  . .          |
-|  . X . . . .  |
-|X   X X X X    |
-|. X O X O O    |
-|O X X O O X .  |
-|. X X X X X .  |
-|  . . X X X .  |
-|      . X . .  |
+|          .    |
+|    . . X      |
+|    X X . . .  |
+|O O X X X X .  |
+|O O O X X .    |
+|O O O O X .    |
+|O     X X X    |
+|O     X . O    |
 +---------------+
-17 valid moves: {(0,1), (0,2), (1,1), (1,3), (1,4), (1,5), (1,6), (3,0), (4,6), (5,0), (5,6), (6,1), (6,2), (6,6), (7,3), (7,5), (7,6)}
+10 valid moves: {(0,5), (1,2), (1,3), (2,4), (2,5), (2,6), (3,6), (4,5), (5,5), (7,4)}
 =================
 Timestep #24
-O: 8; X: 19
+O: 14; X: 13
 X's turn
 +---------------+
 |               |
-|    X          |
-|X . X X X X .  |
-|. X O X O O .  |
-|O O X O O X .  |
-|O X X X X X    |
-|      X X X    |
 |        X      |
+|.   X X        |
+|O O X X X X    |
+|O O O X X      |
+|O O O O X      |
+|O . . O X X    |
+|O   . X O O .  |
 +---------------+
-5 valid moves: {(2,1), (2,6), (3,0), (3,6), (4,6)}
+5 valid moves: {(2,0), (6,1), (6,2), (7,2), (7,6)}
 =================
 Timestep #25
-O: 6; X: 22
+O: 13; X: 15
 O's turn
 +---------------+
-|  . .          |
-|    X . .   .  |
-|X . X X X X X  |
-|. X O X O X .  |
-|O O X O X X .  |
-|O X X X X X .  |
-|  . . X X X    |
-|      . X   .  |
+|          .    |
+|    . . X      |
+|    X X . . .  |
+|O O X X X X .  |
+|O O O X X .    |
+|O O O O X . .  |
+|O     X X X    |
+|O . X X O O    |
 +---------------+
-14 valid moves: {(0,1), (0,2), (1,3), (1,4), (1,6), (2,1), (3,0), (3,6), (4,6), (5,6), (6,1), (6,2), (7,3), (7,6)}
+11 valid moves: {(0,5), (1,2), (1,3), (2,4), (2,5), (2,6), (3,6), (4,5), (5,5), (5,6), (7,1)}
 =================
 Timestep #26
-O: 8; X: 21
+O: 16; X: 13
 X's turn
 +---------------+
 |               |
-|    X          |
-|X . X X X X X  |
-|O O O X O X    |
-|O O X O X X    |
-|O X X X X X    |
-|.     X X X    |
 |        X      |
+|.   X X        |
+|O O X X X X    |
+|O O O X X      |
+|O O O O X      |
+|O . . X X X    |
+|O O O O O O    |
 +---------------+
-2 valid moves: {(2,1), (6,0)}
+3 valid moves: {(2,0), (6,1), (6,2)}
 =================
 Timestep #27
-O: 5; X: 25
+O: 13; X: 17
 O's turn
 +---------------+
-|  . .          |
-|    X . .   .  |
-|X   X X X X X  |
-|X O O X O X .  |
-|X O X O X X .  |
-|X X X X X X .  |
-|X . . X X X    |
-|      . X . .  |
+|          .    |
+|    . . X      |
+|    X X .   .  |
+|O O X X X X .  |
+|O O X X X .    |
+|O O X X X . .  |
+|O   X X X X    |
+|O O O O O O    |
 +---------------+
-13 valid moves: {(0,1), (0,2), (1,3), (1,4), (1,6), (3,6), (4,6), (5,6), (6,1), (6,2), (7,3), (7,5), (7,6)}
+9 valid moves: {(0,5), (1,2), (1,3), (2,4), (2,6), (3,6), (4,5), (5,5), (5,6)}
 =================
 Timestep #28
-O: 9; X: 22
+O: 15; X: 16
 X's turn
 +---------------+
 |               |
-|    X          |
-|X . X X X X X  |
-|X O O X O X    |
-|X O O O X X    |
-|X X X O X X    |
-|X   . X O X    |
-|      . X O .  |
+|        X      |
+|.   X X        |
+|O O X X X X    |
+|O O X X X      |
+|O O X X X   O  |
+|O   X X X O .  |
+|O O O O O O .  |
 +---------------+
-4 valid moves: {(2,1), (6,2), (7,3), (7,6)}
+3 valid moves: {(2,0), (6,6), (7,6)}
 =================
 Timestep #29
-O: 8; X: 24
+O: 14; X: 18
 O's turn
 +---------------+
-|  . .          |
-|    X . . . . .|
-|X   X X X X X  |
-|X O O X O X .  |
-|X O O O X X .  |
-|X X X O X X .  |
-|X . . X O X .  |
-|      . X X X  |
+|          .    |
+|    . . X      |
+|    X X .   .  |
+|O O X X X X .  |
+|O O X X X .    |
+|O O X X X . O  |
+|O   X X X X    |
+|O O O O O O X .|
 +---------------+
-14 valid moves: {(0,1), (0,2), (1,3), (1,4), (1,5), (1,6), (1,7), (3,6), (4,6), (5,6), (6,1), (6,2), (6,6), (7,3)}
+9 valid moves: {(0,5), (1,2), (1,3), (2,4), (2,6), (3,6), (4,5), (5,5), (7,7)}
 =================
 Timestep #30
-O: 10; X: 23
+O: 16; X: 17
 X's turn
 +---------------+
 |               |
-|    X          |
-|X . X X X X X  |
-|X O O X O X    |
-|X O O O X X    |
-|X X X O X X    |
-|X   . O O X    |
-|    . O X X X  |
+|        X      |
+|.   X X        |
+|O O X X X X    |
+|O O X X X     .|
+|O O X X X   O  |
+|O   X X X X    |
+|O O O O O O O O|
 +---------------+
-3 valid moves: {(2,1), (6,2), (7,2)}
+2 valid moves: {(2,0), (4,7)}
 =================
 Timestep #31
-O: 8; X: 26
+O: 15; X: 19
 O's turn
 +---------------+
-|  . .          |
-|    X . . . . .|
-|X   X X X X X  |
-|X O O X O X .  |
-|X O O O X X .  |
-|X X X O X X .  |
-|X . . X O X .  |
-|    X X X X X  |
+|          .    |
+|    . . X      |
+|  . X X .   .  |
+|O O X X X X .  |
+|O O X X X .   X|
+|O O X X X . X  |
+|O   X X X X    |
+|O O O O O O O O|
 +---------------+
-13 valid moves: {(0,1), (0,2), (1,3), (1,4), (1,5), (1,6), (1,7), (3,6), (4,6), (5,6), (6,1), (6,2), (6,6)}
+9 valid moves: {(0,5), (1,2), (1,3), (2,1), (2,4), (2,6), (3,6), (4,5), (5,5)}
 =================
 Timestep #32
-O: 11; X: 24
+O: 21; X: 14
 X's turn
 +---------------+
 |               |
-|    X          |
-|X . X X X X X  |
-|X O O X O X    |
-|X O O O X X    |
-|X X O O X X    |
-|X . O O O X    |
-|  . X X X X X  |
+|        X      |
+|.   X X        |
+|O O X X X X    |
+|O O O O O O   X|
+|O O X X O . X  |
+|O   X O X X    |
+|O O O O O O O O|
 +---------------+
-3 valid moves: {(2,1), (6,1), (7,1)}
+2 valid moves: {(2,0), (5,5)}
 =================
 Timestep #33
-O: 5; X: 31
+O: 19; X: 17
 O's turn
 +---------------+
-|    .          |
-|    X . . .   .|
-|X   X X X X X  |
-|X O O X X X .  |
-|X O O X X X .  |
-|X X X O X X .  |
-|X X X X X X    |
-|  . X X X X X  |
+|          .    |
+|. . . . X      |
+|X . X X . . .  |
+|O X X X X X .  |
+|O O X O O O   X|
+|O O X X O . X  |
+|O . X O X X . .|
+|O O O O O O O O|
 +---------------+
-9 valid moves: {(0,2), (1,3), (1,4), (1,5), (1,7), (3,6), (4,6), (5,6), (7,1)}
+14 valid moves: {(0,5), (1,0), (1,1), (1,2), (1,3), (2,1), (2,4), (2,5), (2,6), (3,6), (5,5), (6,1), (6,6), (6,7)}
 =================
 Timestep #34
-O: 9; X: 28
+O: 22; X: 15
 X's turn
 +---------------+
 |               |
-|    X          |
-|X . X X X X X .|
-|X O O O O O O .|
-|X O O X X X . .|
-|X X X O X X    |
-|X X X X X X    |
-|    X X X X X  |
+|        X      |
+|X   X X        |
+|O X X X X X    |
+|O O X O O O . X|
+|O O O X O . X  |
+|O O O O X X    |
+|O O O O O O O O|
 +---------------+
-5 valid moves: {(2,1), (2,7), (3,7), (4,6), (4,7)}
+2 valid moves: {(4,6), (5,5)}
 =================
 Timestep #35
-O: 3; X: 35
+O: 19; X: 19
 O's turn
 +---------------+
-|    .          |
-|    X . . .   .|
-|X . X X X X X  |
-|X X X X X X X X|
-|X O O X X X .  |
-|X X X O X X .  |
-|X X X X X X    |
-|  . X X X X X  |
+|          .    |
+|.   . . X      |
+|X . X X . . .  |
+|O X X X X X .  |
+|O O X X X X X X|
+|O O O X O . X  |
+|O O O O X X .  |
+|O O O O O O O O|
 +---------------+
-9 valid moves: {(0,2), (1,3), (1,4), (1,5), (1,7), (2,1), (4,6), (5,6), (7,1)}
+11 valid moves: {(0,5), (1,0), (1,2), (1,3), (2,1), (2,4), (2,5), (2,6), (3,6), (5,5), (6,6)}
 =================
 Timestep #36
-O: 7; X: 32
+O: 23; X: 16
 X's turn
 +---------------+
-|    . . .      |
-|    X O .      |
-|X   X O X X X  |
-|X X X O X X X X|
-|X O O O X X    |
-|X X X O X X    |
-|X X X X X X    |
-|    X X X X X  |
+|               |
+|.       X      |
+|X O X X        |
+|O O O X X X    |
+|O O X O X X X X|
+|O O O X O . X  |
+|O O O O X X    |
+|O O O O O O O O|
 +---------------+
-4 valid moves: {(0,2), (0,3), (0,4), (1,4)}
+2 valid moves: {(1,0), (5,5)}
 =================
 Timestep #37
-O: 2; X: 38
+O: 22; X: 18
 O's turn
 +---------------+
-|    . X        |
-|    X X . .    |
-|X . X X X X X  |
-|X X X X X X X X|
-|X O O X X X .  |
-|X X X X X X    |
-|X X X X X X    |
-|  . X X X X X  |
+|          .    |
+|.   . . X      |
+|X O X X . . .  |
+|O O O X X X . .|
+|O O X O X X X X|
+|O O O X X X X .|
+|O O O O X X .  |
+|O O O O O O O O|
 +---------------+
-6 valid moves: {(0,2), (1,4), (1,5), (2,1), (4,6), (7,1)}
+11 valid moves: {(0,5), (1,0), (1,2), (1,3), (2,4), (2,5), (2,6), (3,6), (3,7), (5,7), (6,6)}
 =================
 Timestep #38
-O: 4; X: 37
+O: 25; X: 16
 X's turn
 +---------------+
-|      X        |
-|. . X X        |
-|X O X X X X X  |
-|X O X X X X X X|
-|X O O X X X    |
-|X X X X X X    |
-|X X X X X X    |
-|    X X X X X  |
-+---------------+
-2 valid moves: {(1,0), (1,1)}
-=================
-Timestep #39
-O: 1; X: 41
-O's turn
-+---------------+
-|    . X        |
-|  X X X   .    |
-|X X X X X X X  |
-|X X X X X X X X|
-|X X O X X X .  |
-|X X X X X X    |
-|X X X X X X    |
-|    X X X X X  |
-+---------------+
-3 valid moves: {(0,2), (1,5), (4,6)}
-=================
-Timestep #40
-O: 5; X: 38
-X's turn
-+---------------+
-|  . O X        |
-|  X O X        |
-|X X O X X X X  |
-|X X O X X X X X|
-|X X O X X X    |
-|X X X X X X    |
-|X X X X X X    |
-|    X X X X X  |
-+---------------+
-1 valid moves: {(0,1)}
-=================
-Timestep #41
-O: 3; X: 41
-O's turn
-+---------------+
-|. X X X .      |
-|. X X X . .    |
-|X X O X X X X .|
-|X X O X X X X X|
-|X X O X X X .  |
-|X X X X X X    |
-|X X X X X X .  |
-|    X X X X X  |
-+---------------+
-8 valid moves: {(0,0), (0,4), (1,0), (1,4), (1,5), (2,7), (4,6), (6,6)}
-=================
-Timestep #42
-O: 5; X: 40
-X's turn
-+---------------+
-|O X X X        |
-|. O X X        |
-|X X O X X X X  |
-|X X O X X X X X|
-|X X O X X X    |
-|X X X X X X    |
-|X X X X X X    |
-|    X X X X X  |
+|               |
+|.       X      |
+|X O X X        |
+|O O O X X X    |
+|O O X O X X X X|
+|O O O X X X X  |
+|O O O O O O O  |
+|O O O O O O O O|
 +---------------+
 1 valid moves: {(1,0)}
 =================
-Timestep #43
-O: 4; X: 42
+Timestep #39
+O: 22; X: 20
 O's turn
 +---------------+
-|O X X X .      |
-|X X X X . .    |
-|X X O X X X X .|
-|X X O X X X X X|
-|X X O X X X .  |
-|X X X X X X    |
-|X X X X X X .  |
-|.   X X X X X  |
+|.         .    |
+|X . . . X      |
+|X X X X . . .  |
+|O O X X X X . .|
+|O O X X X X X X|
+|O O O X X X X .|
+|O O O O O O O  |
+|O O O O O O O O|
 +---------------+
-7 valid moves: {(0,4), (1,4), (1,5), (2,7), (4,6), (6,6), (7,0)}
+11 valid moves: {(0,0), (0,5), (1,1), (1,2), (1,3), (2,4), (2,5), (2,6), (3,6), (3,7), (5,7)}
+=================
+Timestep #40
+O: 25; X: 18
+O's turn
++---------------+
+|O         .    |
+|O . . . X      |
+|O X X X . . .  |
+|O O X X X X . .|
+|O O X X X X X X|
+|O O O X X X X .|
+|O O O O O O O  |
+|O O O O O O O O|
++---------------+
+10 valid moves: {(0,5), (1,1), (1,2), (1,3), (2,4), (2,5), (2,6), (3,6), (3,7), (5,7)}
+=================
+Timestep #41
+O: 30; X: 14
+X's turn
++---------------+
+|O              |
+|O       X      |
+|O X X X        |
+|O O X X X X    |
+|O O X X X X X X|
+|O O O O O O O O|
+|O O O O O O O .|
+|O O O O O O O O|
++---------------+
+1 valid moves: {(6,7)}
+=================
+Timestep #42
+O: 28; X: 17
+O's turn
++---------------+
+|O         .    |
+|O . . . X      |
+|O X X X . . .  |
+|O O X X X X . .|
+|O O X X X X X X|
+|O O O O O O X X|
+|O O O O O O O X|
+|O O O O O O O O|
++---------------+
+9 valid moves: {(0,5), (1,1), (1,2), (1,3), (2,4), (2,5), (2,6), (3,6), (3,7)}
+=================
+Timestep #43
+O: 33; X: 13
+X's turn
++---------------+
+|O              |
+|O O .   X      |
+|O O O X .      |
+|O O X O X X    |
+|O O X X O X X X|
+|O O O O O O X X|
+|O O O O O O O X|
+|O O O O O O O O|
++---------------+
+2 valid moves: {(1,2), (2,4)}
 =================
 Timestep #44
-O: 9; X: 38
-X's turn
+O: 32; X: 15
+O's turn
 +---------------+
-|O O O O O      |
-|X X X O .      |
-|X X O X X X X  |
-|X X O X X X X X|
-|X X O X X X    |
-|X X X X X X    |
-|X X X X X X    |
-|    X X X X X  |
+|O       . .    |
+|O O   . X .    |
+|O O O X X . .  |
+|O O X X X X . .|
+|O O X X O X X X|
+|O O O O O O X X|
+|O O O O O O O X|
+|O O O O O O O O|
 +---------------+
-1 valid moves: {(1,4)}
+8 valid moves: {(0,4), (0,5), (1,3), (1,5), (2,5), (2,6), (3,6), (3,7)}
 =================
 Timestep #45
-O: 8; X: 40
-O's turn
+O: 40; X: 8
+X's turn
 +---------------+
-|O O O O O .    |
-|X X X X X .    |
-|X X O X X X X .|
-|X X O X X X X X|
-|X X O X X X . .|
-|X X X X X X .  |
-|X X X X X X .  |
-|. . X X X X X  |
+|O              |
+|O O .   X      |
+|O O O X X .    |
+|O O O O O O O  |
+|O O X X O O O X|
+|O O O O O O O X|
+|O O O O O O O X|
+|O O O O O O O O|
 +---------------+
-9 valid moves: {(0,5), (1,5), (2,7), (4,6), (4,7), (5,6), (6,6), (7,0), (7,1)}
+2 valid moves: {(1,2), (2,5)}
 =================
 Timestep #46
-O: 11; X: 38
-X's turn
-+---------------+
-|O O O O O O    |
-|X X X X O .    |
-|X X O O X X X  |
-|X X O X X X X X|
-|X X O X X X    |
-|X X X X X X    |
-|X X X X X X    |
-|    X X X X X  |
-+---------------+
-1 valid moves: {(1,5)}
-=================
-Timestep #47
-O: 10; X: 40
+O: 38; X: 11
 O's turn
 +---------------+
-|O O O O O O .  |
-|X X X X X X    |
-|X X O O X X X .|
-|X X O X X X X X|
-|X X O X X X . .|
-|X X X X X X .  |
-|X X X X X X .  |
-|. . X X X X X  |
+|O       . .    |
+|O O . . X . .  |
+|O O O X X X . .|
+|O O O O X O X .|
+|O O X X O O O X|
+|O O O O O O O X|
+|O O O O O O O X|
+|O O O O O O O O|
 +---------------+
-8 valid moves: {(0,6), (2,7), (4,6), (4,7), (5,6), (6,6), (7,0), (7,1)}
+9 valid moves: {(0,4), (0,5), (1,2), (1,3), (1,5), (1,6), (2,6), (2,7), (3,7)}
 =================
-Timestep #48
-O: 14; X: 37
+Timestep #47
+O: 41; X: 9
 X's turn
 +---------------+
+|O . .          |
+|O O O . X      |
+|O O O O X X    |
+|O O O O O O X  |
+|O O X X O O O X|
+|O O O O O O O X|
+|O O O O O O O X|
+|O O O O O O O O|
++---------------+
+3 valid moves: {(0,1), (0,2), (1,3)}
+=================
+Timestep #48
+O: 38; X: 13
+O's turn
++---------------+
+|O . X . . .    |
+|O O X . X . .  |
+|O O X O X X . .|
+|O O X O O O X .|
+|O O X X O O O X|
+|O O O O O O O X|
+|O O O O O O O X|
+|O O O O O O O O|
++---------------+
+10 valid moves: {(0,1), (0,3), (0,4), (0,5), (1,3), (1,5), (1,6), (2,6), (2,7), (3,7)}
+=================
+Timestep #49
+O: 42; X: 10
+X's turn
++---------------+
+|O . X .        |
+|O O O O X .    |
+|O O O O O X    |
+|O O X O O O X  |
+|O O X X O O O X|
+|O O O O O O O X|
+|O O O O O O O X|
+|O O O O O O O O|
++---------------+
+3 valid moves: {(0,1), (0,3), (1,5)}
+=================
+Timestep #50
+O: 40; X: 13
+O's turn
++---------------+
+|O   X   . . .  |
+|O O O O X X .  |
+|O O O O X X . .|
+|O O X X O O X .|
+|O O X X O O O X|
+|O O O O O O O X|
+|O O O O O O O X|
+|O O O O O O O O|
++---------------+
+7 valid moves: {(0,4), (0,5), (0,6), (1,6), (2,6), (2,7), (3,7)}
+=================
+Timestep #51
+O: 45; X: 9
+X's turn
++---------------+
+|O   X .        |
+|O O O O X X    |
+|O O O O X X    |
+|O O X X O O O O|
+|O O X X O O O O|
+|O O O O O O O O|
+|O O O O O O O O|
+|O O O O O O O O|
++---------------+
+1 valid moves: {(0,3)}
+=================
+Timestep #52
+O: 43; X: 12
+O's turn
++---------------+
+|O   X X . . .  |
+|O O O X X X .  |
+|O O O X X X .  |
+|O O X X O O O O|
+|O O X X O O O O|
+|O O O O O O O O|
+|O O O O O O O O|
+|O O O O O O O O|
++---------------+
+5 valid moves: {(0,4), (0,5), (0,6), (1,6), (2,6)}
+=================
+Timestep #53
+O: 47; X: 9
+X's turn
++---------------+
+|O   X X        |
+|O O O X X X .  |
 |O O O O O O O  |
-|X X X X X O .  |
-|X X O O O X X  |
-|X X O O X X X X|
-|X X O X X X    |
-|X X X X X X    |
-|X X X X X X    |
-|    X X X X X  |
+|O O X X O O O O|
+|O O X X O O O O|
+|O O O O O O O O|
+|O O O O O O O O|
+|O O O O O O O O|
 +---------------+
 1 valid moves: {(1,6)}
 =================
-Timestep #49
-O: 13; X: 39
-O's turn
-+---------------+
-|O O O O O O O  |
-|X X X X X X X  |
-|X X O O O X X .|
-|X X O O X X X X|
-|X X O X X X . .|
-|X X X X X X .  |
-|X X X X X X .  |
-|. . X X X X X  |
-+---------------+
-7 valid moves: {(2,7), (4,6), (4,7), (5,6), (6,6), (7,0), (7,1)}
-=================
-Timestep #50
-O: 20; X: 33
-O's turn
-+---------------+
-|O O O O O O O .|
-|O X X X X X X .|
-|O X O O O X X .|
-|O X O O X X X X|
-|O X O X X X . .|
-|O X X X X X .  |
-|O X X X X X .  |
-|O . X X X X X  |
-+---------------+
-8 valid moves: {(0,7), (1,7), (2,7), (4,6), (4,7), (5,6), (6,6), (7,1)}
-=================
-Timestep #51
-O: 27; X: 27
-X's turn
-+---------------+
-|O O O O O O O O|
-|O X X X X X O .|
-|O X O O O O X  |
-|O X O O O X X X|
-|O X O O X X    |
-|O X O X X X    |
-|O O X X X X    |
-|O . X X X X X  |
-+---------------+
-2 valid moves: {(1,7), (7,1)}
-=================
-Timestep #52
-O: 26; X: 29
-O's turn
-+---------------+
-|O O O O O O O O|
-|O X X X X X X X|
-|O X O O O O X .|
-|O X O O O X X X|
-|O X O O X X . .|
-|O X O X X X .  |
-|O O X X X X .  |
-|O   X X X X X  |
-+---------------+
-5 valid moves: {(2,7), (4,6), (4,7), (5,6), (6,6)}
-=================
-Timestep #53
-O: 30; X: 26
-X's turn
-+---------------+
-|O O O O O O O O|
-|O X X X X X O O|
-|O X O O O O O O|
-|O X O O O X X X|
-|O X O O X X    |
-|O X O X X X    |
-|O O X X X X    |
-|O . X X X X X  |
-+---------------+
-1 valid moves: {(7,1)}
-=================
 Timestep #54
-O: 29; X: 28
+O: 45; X: 12
 O's turn
 +---------------+
+|O   X X . . . .|
+|O O O X X X X .|
+|O O O O O X O  |
+|O O X X X O O O|
+|O O X X O O O O|
 |O O O O O O O O|
-|O X X X X X O O|
-|O X O O O O O O|
-|O X O O O X X X|
-|O X O O X X . .|
-|O X O X X X .  |
-|O X X X X X .  |
-|O X X X X X X .|
+|O O O O O O O O|
+|O O O O O O O O|
 +---------------+
-5 valid moves: {(4,6), (4,7), (5,6), (6,6), (7,7)}
+5 valid moves: {(0,4), (0,5), (0,6), (0,7), (1,7)}
 =================
 Timestep #55
-O: 32; X: 26
-O's turn
+O: 50; X: 8
+X's turn
 +---------------+
+|O   X X       O|
+|O O O X X X O .|
+|O O O O O O O  |
+|O O X X O O O O|
+|O O X O O O O O|
 |O O O O O O O O|
-|O X X X X X O O|
-|O X O O O O O O|
-|O X O O O X O O|
-|O X O O X X . O|
-|O X O X X X .  |
-|O X X X X X .  |
-|O X X X X X X .|
+|O O O O O O O O|
+|O O O O O O O O|
 +---------------+
-4 valid moves: {(4,6), (5,6), (6,6), (7,7)}
+1 valid moves: {(1,7)}
 =================
 Timestep #56
-O: 36; X: 23
-X's turn
+O: 49; X: 10
+O's turn
 +---------------+
+|O   X X . . . O|
+|O O O X X X X X|
+|O O O O O O O .|
+|O O X X O O O O|
+|O O X O O O O O|
 |O O O O O O O O|
-|O X X X X X O O|
-|O X O O O O O O|
-|O X O O O O O O|
-|O X O O O O O O|
-|O X O X X X . .|
-|O X X X X X    |
-|O X X X X X X  |
+|O O O O O O O O|
+|O O O O O O O O|
 +---------------+
-2 valid moves: {(5,6), (5,7)}
+4 valid moves: {(0,4), (0,5), (0,6), (2,7)}
 =================
 Timestep #57
-O: 33; X: 27
+O: 51; X: 9
 O's turn
 +---------------+
+|O   X X . . . O|
+|O O O X X X X O|
 |O O O O O O O O|
-|O X X X X X O O|
-|O X O O X O O O|
-|O X O O O X O O|
-|O X O O O O X O|
-|O X O X X X . X|
-|O X X X X X . .|
-|O X X X X X X .|
+|O O X X O O O O|
+|O O X O O O O O|
+|O O O O O O O O|
+|O O O O O O O O|
+|O O O O O O O O|
 +---------------+
-4 valid moves: {(5,6), (6,6), (6,7), (7,7)}
+3 valid moves: {(0,4), (0,5), (0,6)}
 =================
 Timestep #58
-O: 35; X: 26
-X's turn
+O: 54; X: 7
+O's turn
 +---------------+
+|O   X X . . O O|
+|O O O X X O O O|
 |O O O O O O O O|
-|O X X X X X O O|
-|O X O O X O O O|
-|O X O O O X O O|
-|O X O O O O X O|
-|O X O X X X . O|
-|O X X X X X   O|
-|O X X X X X X  |
+|O O X X O O O O|
+|O O X O O O O O|
+|O O O O O O O O|
+|O O O O O O O O|
+|O O O O O O O O|
 +---------------+
-1 valid moves: {(5,6)}
+2 valid moves: {(0,4), (0,5)}
 =================
 Timestep #59
-O: 32; X: 30
+O: 56; X: 6
 O's turn
 +---------------+
+|O   X X . O O O|
+|O O O X O O O O|
 |O O O O O O O O|
-|O X X X X X O O|
-|O X O X X O O O|
-|O X O O X X O O|
-|O X O O O X X O|
-|O X O X X X X O|
-|O X X X X X . O|
-|O X X X X X X .|
+|O O X X O O O O|
+|O O X O O O O O|
+|O O O O O O O O|
+|O O O O O O O O|
+|O O O O O O O O|
 +---------------+
-2 valid moves: {(6,6), (7,7)}
+1 valid moves: {(0,4)}
 =================
 Timestep #60
-O: 39; X: 24
+O: 58; X: 5
 O's turn
 +---------------+
+|O . X X O O O O|
 |O O O O O O O O|
-|O X X X X X O O|
-|O X O X X O O O|
-|O X O O X X O O|
-|O X O O O X X O|
-|O X O X X X X O|
-|O X X X X X . O|
+|O O O O O O O O|
+|O O X X O O O O|
+|O O X O O O O O|
+|O O O O O O O O|
+|O O O O O O O O|
 |O O O O O O O O|
 +---------------+
-1 valid moves: {(6,6)}
+1 valid moves: {(0,1)}
 =================
 Timestep #61
-O: 48; X: 16
+O: 61; X: 3
 Winner is O
 +---------------+
 |O O O O O O O O|
-|O X X X X X O O|
-|O X O X X O O O|
-|O X O O X X O O|
-|O X O O O X O O|
-|O X O X X O O O|
+|O O O O O O O O|
+|O O O O O O O O|
+|O O X X O O O O|
+|O O X O O O O O|
+|O O O O O O O O|
 |O O O O O O O O|
 |O O O O O O O O|
 +---------------+

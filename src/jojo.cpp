@@ -11,12 +11,12 @@
 
 #define inf 1e9
 
-const int DEPTH = 3;
+const int DEPTH = 5;
 const int SIZE = 8;
 using ARR = std::array<std::array<int, SIZE>, SIZE>;
 using std::vector;
 
-uint64_t zobristTable[SIZE][SIZE][2];
+// uint64_t zobristTable[SIZE][SIZE][2];
 uint64_t hash = 0;
 
 enum Algo { purerandom, statevalue, minimax, alphabeta, mtdf };
@@ -128,24 +128,61 @@ void put_disc(ARR& _board, Point p, int curPlayer)
     flip_discs(_board, p, curPlayer);
 }
 bool visit[SIZE][SIZE] = {};
-int CountStableDisc(ARR _board, Point p, int curPlayer) {
-    std::queue <Point> q;
-    q.push(p);
-    int cnt = 0;
-    while (!q.empty()) {
-        Point p = q.front(); q.pop();
-        if (visit[p.x][p.y]) continue;
-        for (int i = 1; i <= 7; i += 2) {
-            Point t = p + directions[i];
-            if (!is_spot_on_board(t)) continue;
-            if (visit[t.x][t.y]) continue;
-            visit[t.x][t.y] = true;
-            if (_board[t.x][t.y] != curPlayer) continue;
-            ++cnt;
-            q.push(t);
+int HelperCountVert(ARR _board, Point pos, int dir , int ply) {
+    // DIR 1 7 UP DOWN
+    int c = 0;
+    Point p = pos;
+    if (visit[p.x][p.y]) return 0;
+    while (_board[p.x][p.y] == ply) {
+        c++;
+        visit[p.x][p.y] = true;
+        p = p + directions[dir];
+    }
+    return c;
+}
+int countStableDisc(ARR _board, Point p, int ply) {
+    int c = 0;
+    int arr[SIZE], i;
+    // LOOK DOWN
+    if (p == corners[0]) {
+        for (i = 0; i < SIZE; i++) {
+            arr[i] = HelperCountVert(_board, Point(0,i), 7, ply);
+        }
+        c += arr[0];
+        for (i = 0; i < SIZE - 1; i++) {
+            if (arr[i] && arr[i+1] && arr[i] >= arr[i+1]) c += arr[i+1];
         }
     }
-    return cnt;
+    else if (p == corners[1]) {
+        for (i = SIZE - 1; i >= 0; i--) {
+            arr[i] = HelperCountVert(_board, Point(0,i), 7, ply);
+        }
+        c += arr[SIZE - 1];
+        for (i = SIZE - 1; i >= 0; i--) {
+            if (arr[i] && arr[i+1] && arr[i] >= arr[i+1]) c += arr[i+1];
+        }
+    }
+
+    else if (p == corners[2]) {
+         for (i = 0; i < SIZE; i++) {
+            arr[i] = HelperCountVert(_board, Point(7,i), 1, ply);
+        }
+        c += arr[0];
+        for (i = 0; i < SIZE - 1; i++) {
+            if (arr[i] && arr[i+1] && arr[i] >= arr[i+1]) c += arr[i+1];
+        }
+    }
+
+    else if (p == corners[3]) {
+         for (i = SIZE - 1; i >= 0; i--) {
+            arr[i] = HelperCountVert(_board, Point(7,i), 7, ply);
+        }
+        c += arr[SIZE - 1];
+        for (i = SIZE - 1; i >= 0; i--) {
+            if (arr[i] && arr[i+1] && arr[i] >= arr[i+1]) c += arr[i+1];
+        }
+    }
+    return c;
 }
 double Heuristic(ARR _board, int curPlayer)
 {
@@ -161,7 +198,7 @@ double Heuristic(ARR _board, int curPlayer)
     w[6] = {-3, -7, -3, -1, -1, -3, -7, -3};
     w[7] = {20, -3, 11, 8, 8, 11, -3, 20};
 
-    // Position Values and Pieces Count
+    // Position Values
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++) {
             if (_board[i][j] == curPlayer)
@@ -171,6 +208,7 @@ double Heuristic(ARR _board, int curPlayer)
             count[_board[i][j]]++;
         }
     }
+    // DISC COUNT
     if (count[curPlayer] > count[getNextPlayer(curPlayer)])
         D = (100.0 * count[curPlayer]) /
             (count[curPlayer] + count[getNextPlayer(curPlayer)]);
@@ -180,16 +218,19 @@ double Heuristic(ARR _board, int curPlayer)
     else
         D = 0;
 
-    // Count all stable disc
+    // Kinda Stable
     count[1] = count[2] = 0;
-    for (int ply = 1; ply <= 2; ply++) {
-        memset(visit,false,sizeof(visit));
-        for (Point p : corners) {
-            if (_board[p.x][p.y] == ply){
-                count[ply] += CountStableDisc(_board, p, ply);
-            }
-        }
-    }
+                // std::ofstream log("TRY.txt");
+    // for (int ply = 1; ply <= 2; ply++) {
+    //     memset(visit,false,sizeof(visit));
+    //     for (Point p : corners) {
+    //         if (_board[p.x][p.y] == ply){
+    //             count[ply] += countStableDisc(_board, p, ply);
+    //             // log << count[ply]<< " ";
+                
+    //         }
+    //     }
+    // }
     if (count[curPlayer] > count[getNextPlayer(curPlayer)])
         SDC = (100.0 * count[curPlayer]) /
              (count[curPlayer] + count[getNextPlayer(curPlayer)]);
@@ -198,7 +239,6 @@ double Heuristic(ARR _board, int curPlayer)
              (count[curPlayer] + count[getNextPlayer(curPlayer)]);
     else
         SDC = 0;
-
     // Valid Moves Count
     count[curPlayer] = get_valid_spots(_board, curPlayer).size();
     count[getNextPlayer(curPlayer)] =
@@ -212,7 +252,7 @@ double Heuristic(ARR _board, int curPlayer)
     else
         MC = 0;
 
-    // Corner Stability
+    // Corner Instability
     count[1] = count[2] = 0;
     for (Point c : corners) {
         if (_board[c.x][c.y] == EMPTY) {
@@ -223,7 +263,7 @@ double Heuristic(ARR _board, int curPlayer)
         }
     }
 
-    CS = -12.25 * (count[curPlayer] - count[getNextPlayer(curPlayer)]);
+    CS = -20.25 * (count[curPlayer] - count[getNextPlayer(curPlayer)]);
     
     // Corners Captured
     count[1] = count[2] = 0;
@@ -233,7 +273,7 @@ double Heuristic(ARR _board, int curPlayer)
 
     C = 25 * (count[curPlayer] - count[getNextPlayer(curPlayer)]);
 
-    double score = (10 * V) + (10 * D) + (78.922 * MC) + (382.026 * CS) + (801.724 * C) + (301.25 * SDC);
+    double score = (10 * V) + (11 * D) + (80 * MC) + (375.78 * CS) + (805.131 * C) + (100.25 * SDC);
     return score;
 }
 Point StateValue()
@@ -302,8 +342,8 @@ double AlphaBeta(ARR _board, int depth, int curPlayer, double a, double b) {
             put_disc(_state, p, curPlayer);
             val = std::max(val, AlphaBeta(_state, depth - 1, getNextPlayer(curPlayer), a, b));
 
-            if (val >= b) break;
             a = std::max(a, val);
+            if (a >= b) break;
         }
         return val;
     }
@@ -315,8 +355,8 @@ double AlphaBeta(ARR _board, int depth, int curPlayer, double a, double b) {
             put_disc(_state, p , curPlayer);
             val = std::min(val, AlphaBeta(_state, depth - 1, getNextPlayer(curPlayer), a, b));
 
-            if (val <= a) break;
             b = std::min(b, val);
+            if (b <= a) break;
         }
         return val;
     }
@@ -324,6 +364,7 @@ double AlphaBeta(ARR _board, int depth, int curPlayer, double a, double b) {
 Point AlphaBetaDecision(int depth, std::ofstream& fout) {
      double bestVal = -inf;
 
+            // std::ofstream log("TRY.txt");
     for (auto p : next_valid_spots) {
         ARR _state = board;
         put_disc(_state, p , player);
@@ -333,6 +374,9 @@ Point AlphaBetaDecision(int depth, std::ofstream& fout) {
             bestMove = p;
             bestVal = tmp;
         }
+
+            // log << bestMove.x << " " << bestMove.y << "\n";
+
         fout << bestMove.x << " " << bestMove.y << "\n";
     }
     return bestMove;

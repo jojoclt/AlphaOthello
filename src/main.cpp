@@ -6,7 +6,7 @@
 #include <vector>
 #include <cassert>
 // Timeout is set to 10 when TA test your code.
-const int timeout = 1;
+const int timeout = 10;
 
 struct Point {
     int x, y;
